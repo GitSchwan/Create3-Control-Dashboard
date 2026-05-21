@@ -55,21 +55,45 @@ def robot_main(command_queue, shared_state):
     shared_state.setdefault("battery", None)
     shared_state.setdefault("ir", None)
 
+    #Bumper sensors
+
     @event(robot.when_bumped, [False, True])
-    async def right_bumper(robot):
+    async def right_bumper():
         shared_state["bumper_right"] = True
         shared_state["status"] = "Right bumper triggered"
 
     @event(robot.when_bumped, [True, False])
-    async def left_bumper(robot):
+    async def left_bumper():
         shared_state["bumper_left"] = True
         shared_state["status"] = "Left bumper triggered"
 
     @event(robot.when_bumped, [True, True])
-    async def both_bumpers(robot):
+    async def both_bumpers():
         shared_state["bumper_left"] = True
         shared_state["bumper_right"] = True
         shared_state["status"] = "Both bumpers triggered"
+
+    #Cliff sensors
+
+    @event(robot.when_cliff_sensor, [True, False, False, False])
+    async def cliff():
+        shared_state["cliff"] = [True, False, False, False]
+
+    @event(robot.when_cliff_sensor, [False, True, False, False])
+    async def cliff():
+        shared_state["cliff"] = [False, True, False, False]
+
+    @event(robot.when_cliff_sensor, [False, False, True, False])
+    async def cliff():
+        shared_state["cliff"] = [False, False, True, False]
+
+    @event(robot.when_cliff_sensor, [False, False, False, True])
+    async def cliff():
+        shared_state["cliff"] = [False, False, False, True]
+
+    @event(robot.when_cliff_sensor, [True, True, True, True])
+    async def cliff():
+        shared_state["cliff"] = [True, True, True, True]
 
     async def handle_command(command):
         if not isinstance(command, dict):
@@ -163,8 +187,8 @@ def robot_main(command_queue, shared_state):
                 if command is not None:
                     await handle_command(command)
 
-                await update_robot_state()
                 await asyncio.sleep(0.05)
+                await update_robot_state()
 
             except asyncio.CancelledError:
                 shared_state["status"] = "Robot play loop cancelled"
