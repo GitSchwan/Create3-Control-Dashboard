@@ -1,0 +1,84 @@
+.app-container {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+
+.top-section {
+    display: flex;
+    gap: 20px;
+}
+
+.card {
+    border: 1px solid #ccc;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.sensor-card {
+    width: 30%;
+}
+
+.battery-card,
+.cliff-card {
+    width: 20%;
+}
+
+.controls {
+    display: grid;
+    grid-template-columns: repeat(4, 55px);
+    grid-template-rows: repeat(3, 40px);
+    gap: 10px;
+    align-items: center;
+    justify-items: center;
+}
+
+/* Row 1 */
+#btn-forward {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+#btn-dock {
+    grid-column: 4;
+    grid-row: 1;
+}
+
+/* Row 2 */
+#btn-left {
+    grid-column: 1;
+    grid-row: 2;
+}
+
+#btn-stop {
+    grid-column: 2;
+    grid-row: 2;
+}
+
+#btn-right {
+    grid-column: 3;
+    grid-row: 2;
+}
+
+#btn-undock {
+    grid-column: 4;
+    grid-row: 2;
+}
+
+/* Row 3 */
+#btn-backward {
+    grid-column: 2;
+    grid-row: 3;
+}
+
+.log-output {
+    height: 300px;
+    overflow-y: auto;
+    background-color: #f5f5f5;
+    padding: 10px;
+    font-family: monospace;
+    white-space: pre-wrap;
+}
+
+.battery-progress {
+    width: 100%;
+}
