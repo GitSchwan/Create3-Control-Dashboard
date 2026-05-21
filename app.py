@@ -14,7 +14,7 @@ if __name__ == "__main__":
         "bumper_left": False,
         "bumper_right": False,
         "ir": [0, 0, 0, 0, 0, 0, 0],
-        "cliff": [False] * 4,
+        "cliff": [False, False, False, False],
     })
 
     dashboard_process = Process(

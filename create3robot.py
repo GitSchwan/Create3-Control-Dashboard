@@ -141,6 +141,12 @@ def robot_main(command_queue, shared_state):
                 shared_state["status"] = "Undocked"
                 add_log("Undocked.")
 
+            elif action == "set_color":
+                r = command["color"]["rgb"]["r"]
+                g = command["color"]["rgb"]["g"]
+                b = command["color"]["rgb"]["b"]
+                await robot.set_lights_on_rgb(r, g, b)
+
             else:
                 add_log(f"Ignoring unknown action: {action}")
 

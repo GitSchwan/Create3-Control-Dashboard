@@ -3,6 +3,7 @@
     padding: 20px;
 }
 
+.control-section,
 .top-section {
     display: flex;
     gap: 20px;
@@ -14,13 +15,22 @@
     border-radius: 8px;
 }
 
-.sensor-card {
-    width: 30%;
+.sensor-card,
+.cliff-card {
+    width: 40%;
 }
 
-.battery-card,
-.cliff-card {
+.battery-card{
     width: 20%;
+}
+
+.controls-card {
+    width: 50%;
+    align-items: center;
+}
+
+.rgb-card {
+    width: 50%;
 }
 
 .controls {
@@ -28,6 +38,7 @@
     grid-template-columns: repeat(4, 55px);
     grid-template-rows: repeat(3, 40px);
     gap: 10px;
+    align-content: center;
     align-items: center;
     justify-items: center;
 }
@@ -61,7 +72,7 @@
 
 #btn-undock {
     grid-column: 4;
-    grid-row: 2;
+    grid-row: 3;
 }
 
 /* Row 3 */

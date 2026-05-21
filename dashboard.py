@@ -1,4 +1,5 @@
 from dash import Dash, html, dcc, Input, Output, State
+import dash_daq as daq
 import plotly.graph_objects as go
 import asyncio
 from app_logger import add_log, get_logs_as_text, configure_logger
@@ -56,9 +57,10 @@ def run_dashboard(command_queue, shared_state, shared_logs) -> None:
             html.Br(),
 
             #controls
-            html.Div(className="card", children=[
-                    html.H3("Controls"),
-                    html.Div(className="controls", children=[
+            html.Div(className="control-section", children=[
+                    html.Div(className="card controls-card", children=[
+                        html.H3("Movement Controls"),
+                        html.Div(className="controls", children=[
                             html.Button("Forward", id="btn-forward", n_clicks=0),
                             html.Button("Backward", id="btn-backward", n_clicks=0),
                             html.Button("Turn Left", id="btn-left", n_clicks=0),
@@ -67,8 +69,19 @@ def run_dashboard(command_queue, shared_state, shared_logs) -> None:
                             html.Button("Dock", id="btn-dock", n_clicks=0),
                             html.Button("Undock", id="btn-undock", n_clicks=0),
                         ],),
+                        html.Br(),
+                        html.Div(id="last-command", children="Last command: None")
+                    ]),
                     html.Br(),
-                    html.Div(id="last-command", children="Last command: None"),
+                    # rgb control
+                    html.Div(className="card rgb-card", children=[
+                        html.H3("RGB Control"),
+                        daq.ColorPicker(
+                            id="color-picker",
+                            label="Color Picker",
+                            value=dict(r=255, g=255, b=255),
+                        )
+                    ],)
                 ],), #controls close
 
             html.Br(),
@@ -89,6 +102,13 @@ def run_dashboard(command_queue, shared_state, shared_logs) -> None:
             "cliff": shared_state.get("cliff", [False, False, False, False]),
         }
 
+
+    @app.callback(
+        Input("color-picker", "value"),
+    )
+    def update_color(color):
+        command_queue.put({"action": "set_color", "color": color})
+        return
 
     @app.callback(
         Output("sensor-values", "children"),
@@ -135,7 +155,7 @@ def run_dashboard(command_queue, shared_state, shared_logs) -> None:
         )
 
         # cliff sensors
-        cliff = [html.Div(f"Sensor {i}: {value}") for i, value in enumerate(data["cliff"])]
+        cliff = [html.Div(f"Sensor {i + 1}: {value}") for i, value in enumerate(data["cliff"])]
 
         # chart
         fig = go.Figure(
