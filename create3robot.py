@@ -58,17 +58,17 @@ def robot_main(command_queue, shared_state):
     #Bumper sensors
 
     @event(robot.when_bumped, [False, True])
-    async def right_bumper():
+    async def right_bumper(robot):
         shared_state["bumper_right"] = True
         shared_state["status"] = "Right bumper triggered"
 
     @event(robot.when_bumped, [True, False])
-    async def left_bumper():
+    async def left_bumper(robot):
         shared_state["bumper_left"] = True
         shared_state["status"] = "Left bumper triggered"
 
     @event(robot.when_bumped, [True, True])
-    async def both_bumpers():
+    async def both_bumpers(robot):
         shared_state["bumper_left"] = True
         shared_state["bumper_right"] = True
         shared_state["status"] = "Both bumpers triggered"
@@ -76,23 +76,23 @@ def robot_main(command_queue, shared_state):
     #Cliff sensors
 
     @event(robot.when_cliff_sensor, [True, False, False, False])
-    async def cliff():
+    async def cliff(robot):
         shared_state["cliff"] = [True, False, False, False]
 
     @event(robot.when_cliff_sensor, [False, True, False, False])
-    async def cliff():
+    async def cliff(robot):
         shared_state["cliff"] = [False, True, False, False]
 
     @event(robot.when_cliff_sensor, [False, False, True, False])
-    async def cliff():
+    async def cliff(robot):
         shared_state["cliff"] = [False, False, True, False]
 
     @event(robot.when_cliff_sensor, [False, False, False, True])
-    async def cliff():
+    async def cliff(robot):
         shared_state["cliff"] = [False, False, False, True]
 
     @event(robot.when_cliff_sensor, [True, True, True, True])
-    async def cliff():
+    async def cliff(robot):
         shared_state["cliff"] = [True, True, True, True]
 
     async def handle_command(command):
@@ -135,7 +135,7 @@ def robot_main(command_queue, shared_state):
                 await robot.dock()
                 dock_status = await robot.is_docked()
                 shared_state["status"] = "Docked"
-                add_log(f"Dock status: {dock_status}")
+                add_log(f"Dock status: Docked")
 
             elif action == "undock":
                 shared_state["status"] = "Undocking"

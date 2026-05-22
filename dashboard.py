@@ -1,4 +1,4 @@
-from dash import Dash, html, dcc, Input, Output, State
+from dash import Dash, html, dcc, Input, Output
 import dash_daq as daq
 import plotly.graph_objects as go
 from app_logger import add_log, get_logs_as_text, configure_logger
@@ -147,7 +147,7 @@ def run_dashboard(command_queue, shared_state, shared_logs) -> None:
                 "cliff": [0, 0, 0, 0],
             }
 
-        # sensor text
+        #sensor text
         sensor_text = [
             html.Div(f"Bumper Left: {data['bumper_left']}"),
             html.Div(f"Bumper Right: {data['bumper_right']}"),
@@ -156,7 +156,7 @@ def run_dashboard(command_queue, shared_state, shared_logs) -> None:
         for index, value in enumerate(data["ir"]):
             sensor_text.append(html.Div(f"IR {index + 1}: {value}"))
 
-        # battery
+        #battery
         battery_value = int(data["battery"] or 0)
 
         battery = html.Div(
@@ -170,10 +170,10 @@ def run_dashboard(command_queue, shared_state, shared_logs) -> None:
             ]
         )
 
-        # cliff sensors
+        #cliff sensors
         cliff = [html.Div(f"Sensor {i + 1}: {value}") for i, value in enumerate(data["cliff"])]
 
-        # chart
+        #chart
         fig = go.Figure(
             data=[
                 go.Bar(
