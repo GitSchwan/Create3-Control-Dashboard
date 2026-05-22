@@ -1,10 +1,9 @@
 from dash import Dash, html, dcc, Input, Output, State
 import dash_daq as daq
 import plotly.graph_objects as go
-import asyncio
 from app_logger import add_log, get_logs_as_text, configure_logger
 
-# global state
+#global state
 last_command = "None"
 connected_robot = None
 
@@ -59,16 +58,26 @@ def run_dashboard(command_queue, shared_state, shared_logs) -> None:
             #controls
             html.Div(className="control-section", children=[
                     html.Div(className="card controls-card", children=[
-                        html.H3("Movement Controls"),
-                        html.Div(className="controls", children=[
-                            html.Button("Forward", id="btn-forward", n_clicks=0),
-                            html.Button("Backward", id="btn-backward", n_clicks=0),
-                            html.Button("Turn Left", id="btn-left", n_clicks=0),
-                            html.Button("Turn Right", id="btn-right", n_clicks=0),
-                            html.Button("Stop", id="btn-stop", n_clicks=0),
-                            html.Button("Dock", id="btn-dock", n_clicks=0),
-                            html.Button("Undock", id="btn-undock", n_clicks=0),
-                        ],),
+                        html.Div(className="controls-frame", children=[
+                            html.H3("Movement Controls"),
+                            html.Div(className="controls", children=[
+                                html.Button("Forward", id="btn-forward", n_clicks=0),
+                                html.Button("Backward", id="btn-backward", n_clicks=0),
+                                html.Button("Turn Left", id="btn-left", n_clicks=0),
+                                html.Button("Turn Right", id="btn-right", n_clicks=0),
+                                html.Button("Stop", id="btn-stop", n_clicks=0),
+                                html.Button("Dock", id="btn-dock", n_clicks=0),
+                                html.Button("Undock", id="btn-undock", n_clicks=0),
+                            ],),
+                            html.Div(className="speed-controls", children=[
+                                html.H4("Speed"),
+                                daq.Slider(id="speed-slider", max=30, min=5, step=5,
+                                           marks={'5': '5', '10': '10', '15': '15', '20': '20', '25': '25', '30': '30'},
+                                           vertical=True,
+                                           value=15, updatemode="drag",
+                                           ),
+                            ]),
+                        ]),
                         html.Br(),
                         html.Div(id="last-command", children="Last command: None")
                     ]),
@@ -109,6 +118,13 @@ def run_dashboard(command_queue, shared_state, shared_logs) -> None:
     def update_color(color):
         command_queue.put({"action": "set_color", "color": color})
         return
+
+    @app.callback(
+        Input("speed-slider", "value"),
+    )
+    def update_speed(speed):
+        shared_state["speed"] = speed
+        add_log(f"Speed set to {speed}")
 
     @app.callback(
         Output("sensor-values", "children"),

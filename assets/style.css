@@ -27,6 +27,8 @@
 .controls-card {
     width: 50%;
     align-items: center;
+    display: block;
+
 }
 
 .rgb-card {
@@ -35,12 +37,17 @@
 
 .controls {
     display: grid;
-    grid-template-columns: repeat(4, 55px);
+    grid-template-columns: repeat(5, 55px);
     grid-template-rows: repeat(3, 40px);
     gap: 10px;
     align-content: center;
     align-items: center;
     justify-items: center;
+    margin-left: -100px;
+}
+
+.controls-frame{
+    display: flex;
 }
 
 /* Row 1 */
@@ -79,6 +86,18 @@
 #btn-backward {
     grid-column: 2;
     grid-row: 3;
+}
+.speed-controls{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin: 10px;
+}
+
+.speed-controls #speed-slider {
+    display: block !important;
+    height: 400%;
 }
 
 .log-output {

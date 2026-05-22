@@ -106,15 +106,17 @@ def robot_main(command_queue, shared_state):
         try:
             if action == "forward":
                 shared_state["status"] = "Moving forward"
-                await robot.move(10)
+                speed = shared_state["speed"]
+                await robot.set_wheel_speeds(speed, speed)
 
             elif action == "backward":
                 shared_state["status"] = "Moving backward"
-                await robot.move(-10)
+                speed = shared_state["speed"]
+                await robot.set_wheel_speeds(speed * -1, speed * -1)
 
             elif action == "stop":
                 shared_state["status"] = "Stopping"
-                await robot.move(0)
+                await robot.set_wheel_speeds(0, 0)
                 shared_state["status"] = "Stopped"
 
             elif action == "turn_left":
@@ -131,8 +133,9 @@ def robot_main(command_queue, shared_state):
                 shared_state["status"] = "Docking"
                 add_log("Docking...")
                 await robot.dock()
+                dock_status = await robot.is_docked()
                 shared_state["status"] = "Docked"
-                add_log("Docked.")
+                add_log(f"Dock status: {dock_status}")
 
             elif action == "undock":
                 shared_state["status"] = "Undocking"
